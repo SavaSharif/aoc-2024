@@ -1,48 +1,41 @@
-import re
-from common.utils import read_file
 from typing import List
-import numpy as np
 
 def p1(input: List[str]) -> int:
-    digits = [re.findall(r"\d", line) for line in input]
-    numbers = [int("".join(digit[0] + digit[-1])) for digit in digits]
+    first_column = [int(x.split()[0]) for x in input]
+    second_column = [int(x.split()[1]) for x in input]
 
-    return sum(numbers)
+    diff = 0
+    for i in range(len(first_column)):
+        # get the smallest number in the first column
+        min_first = min(first_column)
+        # get the smallest number in the second column
+        min_second = min(second_column)
+        diff += abs(min_first - min_second)
+        # remove the smallest number in the first column
+        first_column.remove(min_first)
+        # remove the smallest number in the second column
+        second_column.remove(min_second)
 
+    return diff
 
 def p2(input: List[str]) -> int:
-    bla = {
-        'zero': '0',
-        'one': '1',
-        'two': '2',
-        'three': '3',
-        'four': '4',
-        'five': '5',
-        'six':'6',
-        'seven': '7',
-        'eight': '8',
-        'nine': '9',
-        '0': '0',
-        '1': '1',
-        '2': '2',
-        '3': '3',
-        '4': '4',
-        '5': '5',
-        '6': '6',
-        '7': '7',
-        '8': '8',
-        '9': '9'
-    }
+    first_column = [int(x.split()[0]) for x in input]
+    second_column = [int(x.split()[1]) for x in input]
 
-    regex = re.compile(r"(?=(zero|one|two|three|four|five|six|seven|eight|nine|\d))")
-    digits = [regex.findall(line) for line in input]
+    diff = 0
+    for i in range(len(first_column)):
+        number = first_column[i]
+        similar = second_column.count(number)
+        diff += (similar * number)
+    return diff
 
-    digits =  [[bla[digit] for digit in line] for line in digits]
-    numbers = [int("".join(digit[0] + digit[-1])) for digit in digits]
+def read_file(file_path):
+    with open(file_path, 'r') as f:
+        return [x.strip() for x in f.readlines()]
 
-    return sum(numbers)
 
 if __name__ == "__main__":
     input = read_file("01/input.txt")
-    # print(p1(input))
+    print(p1(input))
     print(p2(input))
+
